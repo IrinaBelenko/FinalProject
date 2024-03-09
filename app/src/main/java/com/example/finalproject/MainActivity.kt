@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class MainActivity : AppCompatActivity(), OnAuthLaunch {
+class MainActivity : AppCompatActivity(), OnAuthLaunch, onAddClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity(), OnAuthLaunch {
     override fun showListFragment() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container, EmployeeListFragment())
+            .commit()
+    }
+    override fun onFabClick() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.container, AddEmployeeFragment())
+            .addToBackStack("employeeFragment")
             .commit()
     }
 }
