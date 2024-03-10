@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), OnAuthLaunch, onAddClickListener {
 
     override fun showListFragment() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, EmployeeListFragment())
+            .add(R.id.container, ListFragment())
             .commit()
     }
     override fun onFabClick() {

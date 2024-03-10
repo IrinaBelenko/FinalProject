@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -17,7 +16,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class EmployeeListFragment : Fragment() {
+class ListFragment : Fragment() {
 
     private var list: ListView? = null
     private var account: GoogleSignInAccount? = null
@@ -32,7 +31,7 @@ class EmployeeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(
-            R.layout.employee_list_fragment, container,
+            R.layout.list_fragment, container,
             false
         )
     }
