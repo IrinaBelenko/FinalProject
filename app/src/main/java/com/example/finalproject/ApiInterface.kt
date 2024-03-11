@@ -1,5 +1,6 @@
 package com.example.finalproject
 
+
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -9,7 +10,7 @@ interface ApiInterface {
     suspend fun getSimpleRoute(): Response<DirectionsResponse>
 
     @GET("/maps/api/place/nearbysearch/json?location=49.842957,24.031111&radius=2000&type=tourist_attractions&key=AIzaSyDJber0UpLCHpq3F7zYxs5Xww1IEdgbo78")
-    suspend fun getNearbyPlaces():Response<PlacesResponse>
+    suspend fun getNearbyPlaces(): Response<PlacesResponse?>
 
     @GET("/maps/api/directions/json?")
     suspend fun getComplexRoute(

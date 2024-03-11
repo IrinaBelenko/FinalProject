@@ -1,29 +1,20 @@
 package com.example.finalproject
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.fragment.app.Fragment
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+
 
 class ListFragment : Fragment() {
 
-    private var list: ListView? = null
-    private var account: GoogleSignInAccount? = null
-    private val database: FirebaseDatabase = FirebaseDatabase.getInstance(
-        "https://finalproject-8ede2-default-rtdb.europe-west1.firebasedatabase.app/"
-    )
-    private var target: DatabaseReference? = null
+    private var onItemClick: (String) -> Unit = {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,32 +30,33 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
-        list = view.findViewById(R.id.employeeList)
-        account = GoogleSignIn.getLastSignedInAccount(requireContext())
-        target = database.reference
-            .child(account?.id ?: "unknown_account").child("employees")
+        val list: RecyclerView = view.findViewById(R.id.recyclerView)
+        val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        viewModel.getData()
+
+        viewModel.uiState.observe(requireActivity()) {
+            when (it) {
+                is MyViewModel.UIState.Empty -> Unit
+                is MyViewModel.UIState.Result -> {
+                    val data = it.responseResults
+                    if (data.isNotEmpty()) {
+                        val myAdapter = RecyclerViewAdapter(data)
+                        list.adapter = myAdapter
+                    }
+                }
+
+                is MyViewModel.UIState.Processing -> Unit
+                is MyViewModel.UIState.Error -> {
+                    Log.e("response error", it.description)
+                }
+            }
+        }
+        list.layoutManager = LinearLayoutManager(view.context)
+
         fab.setOnClickListener {
             val activity = requireActivity() as onAddClickListener
             activity.onFabClick()
         }
-
-        target?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val employeeList = mutableListOf<String>()
-                if (snapshot.exists()) {
-                    snapshot.children.forEach {
-                        val employee = it?.getValue(String::class.java) ?: ""
-                        employeeList.add(employee)
-                    }
-                    val adapter = ArrayAdapter(
-                        requireActivity(),
-                        android.R.layout.simple_list_item_1, employeeList
-                    )
-                    list?.adapter = adapter
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
     }
+
 }

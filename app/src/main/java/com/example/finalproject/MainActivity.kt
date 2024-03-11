@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -49,10 +53,23 @@ class MainActivity : AppCompatActivity(), OnAuthLaunch, onAddClickListener {
             .add(R.id.container, ListFragment())
             .commit()
     }
+
+    override fun showMapFragment() {
+        val supportMapFragment =
+            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+
+        supportMapFragment.getMapAsync { map ->
+            val coordinates_Lviv = LatLng(49.842957, 24.031111)
+            map.addMarker(MarkerOptions().position(coordinates_Lviv).title("My Position"))
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates_Lviv, 8F))
+        }
+    }
+
+
     override fun onFabClick() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, AddEmployeeFragment())
-            .addToBackStack("employeeFragment")
+            .add(R.id.container, MapFragment())
+            .addToBackStack("mapFragment")
             .commit()
     }
 }
