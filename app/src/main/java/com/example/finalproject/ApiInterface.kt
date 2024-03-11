@@ -18,5 +18,5 @@ interface ApiInterface {
         @Query("destination") destinationId: String,
         @Query("waypoints") waypoints: String,
         @Query("key") key: String = "AIzaSyDJber0UpLCHpq3F7zYxs5Xww1IEdgbo78"
-    ): Response<DirectionsResponse>
+    ): Response<DirectionsResponse?>
 }

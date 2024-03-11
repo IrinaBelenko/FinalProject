@@ -9,4 +9,9 @@ class Repository(private val client: Retrofit) {
         val apiInterface = client.create(ApiInterface::class.java)
         return apiInterface.getNearbyPlaces()
     }
+
+    suspend fun getComplexRoute(originId: String,destinationId: String,waypoints: String): Response<DirectionsResponse?> {
+        val apiInterface = client.create(ApiInterface::class.java)
+        return apiInterface.getComplexRoute(originId,destinationId,waypoints)
+    }
 }

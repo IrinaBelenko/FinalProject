@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         var data: List<Results>? = null
 
-        viewModel.getData()
+        viewModel.getPlaces()
 
         viewModel.uiState.observe(requireActivity()) {
             when (it) {
@@ -45,6 +45,7 @@ class ListFragment : Fragment() {
                     }
                 }
                 is MyViewModel.UIState.Processing -> Unit
+                is MyViewModel.UIState.ResultRoute -> Unit
                 is MyViewModel.UIState.Error -> {
                     Log.e("response error", it.description)
                 }
