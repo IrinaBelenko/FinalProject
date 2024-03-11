@@ -14,8 +14,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListFragment : Fragment() {
 
-    private var onItemClick: (String) -> Unit = {}
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,19 +30,20 @@ class ListFragment : Fragment() {
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         val list: RecyclerView = view.findViewById(R.id.recyclerView)
         val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        var data: List<Results>? = null
+
         viewModel.getData()
 
         viewModel.uiState.observe(requireActivity()) {
             when (it) {
                 is MyViewModel.UIState.Empty -> Unit
                 is MyViewModel.UIState.Result -> {
-                    val data = it.responseResults
-                    if (data.isNotEmpty()) {
-                        val myAdapter = RecyclerViewAdapter(data)
+                    data = it.responseResults
+                    if (data!!.isNotEmpty()) {
+                        val myAdapter = RecyclerViewAdapter(data!!)
                         list.adapter = myAdapter
                     }
                 }
-
                 is MyViewModel.UIState.Processing -> Unit
                 is MyViewModel.UIState.Error -> {
                     Log.e("response error", it.description)
@@ -54,8 +53,12 @@ class ListFragment : Fragment() {
         list.layoutManager = LinearLayoutManager(view.context)
 
         fab.setOnClickListener {
-            val activity = requireActivity() as onAddClickListener
-            activity.onFabClick()
+            val mapFragment = MapFragment()
+            mapFragment.setListResults(data!!)
+            parentFragmentManager.beginTransaction()
+                .add(R.id.container, mapFragment)
+                .addToBackStack("mapFragment")
+                .commit()
         }
     }
 

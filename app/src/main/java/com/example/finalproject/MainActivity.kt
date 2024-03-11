@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class MainActivity : AppCompatActivity(), OnAuthLaunch, onAddClickListener {
+class MainActivity : AppCompatActivity(), OnAuthLaunch {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,22 +54,4 @@ class MainActivity : AppCompatActivity(), OnAuthLaunch, onAddClickListener {
             .commit()
     }
 
-    override fun showMapFragment() {
-        val supportMapFragment =
-            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-
-        supportMapFragment.getMapAsync { map ->
-            val coordinates_Lviv = LatLng(49.842957, 24.031111)
-            map.addMarker(MarkerOptions().position(coordinates_Lviv).title("My Position"))
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates_Lviv, 8F))
-        }
-    }
-
-
-    override fun onFabClick() {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, MapFragment())
-            .addToBackStack("mapFragment")
-            .commit()
-    }
 }
