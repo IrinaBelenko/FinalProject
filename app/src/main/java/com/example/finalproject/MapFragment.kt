@@ -37,18 +37,15 @@ class MapFragment : Fragment() {
             map.addMarker(MarkerOptions().position(coordinates_Lviv).title("My Position"))
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates_Lviv, 8F))
 
-            val locations = mutableListOf<Location>()
             val placeCoordinates = mutableListOf<String>()
             results?.forEach { result ->
-                val location = result.geometry.location
-                locations.add(location)
-                placeCoordinates.add("${result.geometry.location.lat},${result.geometry.location.lng}")
+                val lat = result.geometry.location.lat
+                val lng = result.geometry.location.lng
+                placeCoordinates.add("${lat},${lng}")
+                val coordinates = LatLng(lat, lng)
+                map.addMarker(MarkerOptions().position(coordinates).title(result.name))
             }
 
-            locations.forEach {
-                val coordinates = LatLng(it.lat, it.lng)
-                map.addMarker(MarkerOptions().position(coordinates))
-            }
             val waypointCoordinates = placeCoordinates.drop(0).take(10)
             val waypointCoordinatesString =
                 waypointCoordinates.joinToString(separator = "|")
