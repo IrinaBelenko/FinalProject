@@ -35,7 +35,7 @@ class MapFragment : Fragment() {
         supportMapFragment.getMapAsync { map ->
             val coordinates_Lviv = LatLng(49.842957, 24.031111)
             map.addMarker(MarkerOptions().position(coordinates_Lviv).title("My Position"))
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates_Lviv, 8F))
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates_Lviv, 13F))
 
             val placeCoordinates = mutableListOf<String>()
             results?.forEach { result ->
