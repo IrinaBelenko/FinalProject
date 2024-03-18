@@ -19,8 +19,8 @@ class RecyclerViewAdapter (private val items: List<Results>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
         holder.name.text = items[position].name
-        holder.lat.text = "lat: ${items[position].geometry.location.lat}"
-        holder.lng.text = "lng: ${items[position].geometry.location.lng}"
+        holder.lat.text = "lat: ${String.format("%.6f",items[position].geometry.location.lat)}"
+        holder.lng.text = "lng: ${String.format("%.6f",items[position].geometry.location.lng)}"
         val reference = items[position].photos[0].photoReference
         val request =   "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photo_reference=$reference&key=AIzaSyDJber0UpLCHpq3F7zYxs5Xww1IEdgbo78"
         Picasso.get().load(request).into(holder.image)
